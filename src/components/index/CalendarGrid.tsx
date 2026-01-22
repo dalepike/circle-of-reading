@@ -116,13 +116,142 @@ function WeekCardInner({ week, title, russianTitle, href, isCurrentWeek }: {
   );
 }
 
+/**
+ * Get the month name for a given week number
+ */
+function getMonthForWeek(weekNum: number): string {
+  // Approximate month mapping (4-5 weeks per month)
+  const weekToMonth: Record<number, string> = {};
+  let week = 1;
+  MONTHS.forEach((month, idx) => {
+    const weeksInMonth = idx === 1 ? 4 : (idx === 0 || idx === 2 || idx === 4 || idx === 6 || idx === 7 || idx === 9 || idx === 11) ? 5 : 4;
+    for (let i = 0; i < weeksInMonth && week <= 52; i++) {
+      weekToMonth[week] = month;
+      week++;
+    }
+  });
+  return weekToMonth[weekNum] || 'january';
+}
+
+function MonthSection({ month, monthWeeks, currentWeek, isMobile, isCurrentMonth }: {
+  month: string;
+  monthWeeks: WeekData[];
+  currentWeek: number;
+  isMobile: boolean;
+  isCurrentMonth: boolean;
+}) {
+  const [isExpanded, setIsExpanded] = useState(!isMobile || isCurrentMonth);
+
+  // Update expanded state when mobile changes or current month changes
+  useEffect(() => {
+    if (!isMobile) {
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(isCurrentMonth);
+    }
+  }, [isMobile, isCurrentMonth]);
+
+  const hasCurrentWeek = monthWeeks.some(w => w.week === currentWeek);
+
+  return (
+    <section
+      className="month-section"
+      id={month}
+      style={{
+        padding: '1.5rem',
+        border: '1px solid var(--color-gray-800)',
+      }}
+    >
+      <button
+        onClick={() => isMobile && setIsExpanded(!isExpanded)}
+        className={`
+          w-full flex items-center justify-between
+          ${isMobile ? 'cursor-pointer' : 'cursor-default'}
+        `}
+        aria-expanded={isExpanded}
+        aria-controls={`${month}-weeks`}
+        disabled={!isMobile}
+      >
+        <h3
+          className="month-header"
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: hasCurrentWeek ? 'var(--color-white)' : 'var(--color-gray-400)',
+            margin: 0,
+          }}
+        >
+          {month.charAt(0).toUpperCase() + month.slice(1)}
+          {hasCurrentWeek && <span className="ml-2 text-[0.65rem] normal-case tracking-normal opacity-70">current</span>}
+        </h3>
+        {isMobile && (
+          <span className="flex items-center gap-2">
+            <span className="text-xs text-[var(--color-gray-500)]">{monthWeeks.length} weeks</span>
+            <svg
+              className={`w-4 h-4 text-[var(--color-gray-500)] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        )}
+      </button>
+
+      <div
+        id={`${month}-weeks`}
+        className={`
+          week-cards overflow-hidden transition-all duration-300 ease-out
+          ${isExpanded ? 'mt-4 opacity-100' : 'max-h-0 mt-0 opacity-0'}
+        `}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          maxHeight: isExpanded ? '1000px' : '0',
+        }}
+      >
+        {monthWeeks.map(week => (
+          <WeekCardInner
+            key={week.week}
+            week={week.week}
+            title={week.title}
+            russianTitle={week.russianTitle}
+            href={`/week/${week.slug}/`}
+            isCurrentWeek={week.week === currentWeek}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function CalendarGridInner({ weeks }: CalendarGridProps) {
   const [currentWeek, setCurrentWeek] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState('');
 
   useEffect(() => {
     // Calculate current week on client side only
-    setCurrentWeek(getCurrentWeekOfYear());
-  }, []);
+    const week = getCurrentWeekOfYear();
+    setCurrentWeek(week);
+
+    // Find which month contains the current week
+    const weekData = weeks.find(w => w.week === week);
+    if (weekData) {
+      setCurrentMonth(weekData.month);
+    }
+
+    // Check for mobile
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [weeks]);
 
   // Group weeks by month
   const weeksByMonth = MONTHS.map(month => ({
@@ -153,54 +282,28 @@ function CalendarGridInner({ weeks }: CalendarGridProps) {
         .animate-pulse {
           animation: pulse 2s ease-in-out infinite;
         }
+        .light .month-header {
+          color: var(--color-gray-500);
+        }
+        .light .month-section {
+          border-color: var(--color-gray-200);
+        }
       `}</style>
 
       <div className="calendar-grid" style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '2rem',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        gap: isMobile ? '1rem' : '2rem',
       }}>
         {weeksByMonth.map(({ month, weeks: monthWeeks }) => (
-          <section
+          <MonthSection
             key={month}
-            className="month-section"
-            id={month}
-            style={{
-              padding: '1.5rem',
-              border: '1px solid var(--color-gray-800)',
-            }}
-          >
-            <h3
-              className="month-header"
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                marginBottom: '1rem',
-                color: 'var(--color-gray-400)',
-              }}
-            >
-              {month.charAt(0).toUpperCase() + month.slice(1)}
-            </h3>
-            <div className="week-cards" style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-            }}>
-              {monthWeeks.map(week => (
-                <WeekCardInner
-                  key={week.week}
-                  week={week.week}
-                  title={week.title}
-                  russianTitle={week.russianTitle}
-                  href={`/week/${week.slug}/`}
-                  isCurrentWeek={week.week === currentWeek}
-                />
-              ))}
-            </div>
-          </section>
+            month={month}
+            monthWeeks={monthWeeks}
+            currentWeek={currentWeek}
+            isMobile={isMobile}
+            isCurrentMonth={month === currentMonth}
+          />
         ))}
       </div>
     </>

@@ -42,16 +42,21 @@ export default function SearchDialog() {
     const script = document.createElement("script");
     script.type = "module";
     script.textContent = `
-      import * as pagefind from '/pagefind/pagefind.js';
-      window.pagefind = pagefind;
-      window.dispatchEvent(new Event('pagefind-loaded'));
+      try {
+        const pagefind = await import('/pagefind/pagefind.js');
+        window.pagefind = pagefind;
+        window.dispatchEvent(new Event('pagefind-loaded'));
+      } catch (e) {
+        // Pagefind may not be available in dev mode
+        console.debug('Pagefind not available:', e.message);
+      }
     `;
 
     const handleLoaded = async () => {
       if (window.pagefind) {
         try {
           await window.pagefind.options?.({ excerptLength: 20 });
-        } catch (e) {
+        } catch {
           // options might not exist in all versions
         }
         setPagefindLoaded(true);
