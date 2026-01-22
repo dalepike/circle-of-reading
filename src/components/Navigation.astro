@@ -1,0 +1,85 @@
+---
+import SearchDialog from "./SearchDialog";
+
+interface Props {
+  currentMonth?: string;
+}
+
+const { currentMonth } = Astro.props;
+
+const months = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+
+const monthAbbreviations: Record<string, string> = {
+  january: "Jan",
+  february: "Feb",
+  march: "Mar",
+  april: "Apr",
+  may: "May",
+  june: "Jun",
+  july: "Jul",
+  august: "Aug",
+  september: "Sep",
+  october: "Oct",
+  november: "Nov",
+  december: "Dec",
+};
+---
+
+<header class="sticky top-0 z-50 bg-black/95 light:bg-white/95 backdrop-blur-md">
+  <div class="max-w-3xl mx-auto px-5">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between py-5 border-b border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+      <a href="/" class="font-sans text-lg font-semibold tracking-tight hover:opacity-70 transition-opacity duration-200">
+        Circle of Reading
+      </a>
+
+      <div class="flex items-center gap-5">
+        <a
+          href="/monthly/"
+          class="text-xs font-sans font-light uppercase tracking-widest text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] hover:text-white light:hover:text-black transition-colors duration-200 hidden sm:inline"
+        >
+          Monthly
+        </a>
+        <SearchDialog client:load />
+      </div>
+    </div>
+
+    <!-- Month navigation -->
+    <nav class="overflow-x-auto scrollbar-hide -mx-5 px-5">
+      <ul class="flex gap-1 py-4 min-w-max">
+        {months.map((month) => {
+          const isActive = month === currentMonth;
+          return (
+            <li>
+              <a
+                href={`/${month}/`}
+                class:list={[
+                  "block px-3 py-1.5 text-xs font-sans font-light uppercase tracking-wider transition-all duration-200",
+                  isActive
+                    ? "text-white light:text-black border-b border-white light:border-black"
+                    : "text-[var(--color-gray-500)] hover:text-white light:hover:text-black",
+                ]}
+              >
+                <span class="hidden sm:inline">{month.charAt(0).toUpperCase() + month.slice(1)}</span>
+                <span class="sm:hidden">{monthAbbreviations[month]}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>

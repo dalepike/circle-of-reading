@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from "astro:content";
+import ReadingLayout from "../../layouts/ReadingLayout.astro";
+
+export async function getStaticPaths() {
+  const allReadings = await getCollection("readings");
+
+  // Get monthly readings sorted by month
+  const months = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december"
+  ];
+
+  const monthlyReadings = allReadings
+    .filter((r) => r.data.type === "monthly")
+    .sort((a, b) => {
+      const monthIndexA = months.indexOf(a.data.month);
+      const monthIndexB = months.indexOf(b.data.month);
+      return monthIndexA - monthIndexB;
+    });
+
+  return monthlyReadings.map((reading, index) => {
+    const prevReading = index > 0 ? monthlyReadings[index - 1] : null;
+    const nextReading = index < monthlyReadings.length - 1 ? monthlyReadings[index + 1] : null;
+
+    return {
+      params: {
+        slug: reading.data.slug,
+      },
+      props: {
+        reading,
+        prevReading: prevReading
+          ? {
+              title: prevReading.data.title,
+              slug: prevReading.data.slug,
+              month: "monthly",
+            }
+          : null,
+        nextReading: nextReading
+          ? {
+              title: nextReading.data.title,
+              slug: nextReading.data.slug,
+              month: "monthly",
+            }
+          : null,
+      },
+    };
+  });
+}
+
+const { reading, prevReading, nextReading } = Astro.props;
+const { Content } = await render(reading);
+---
+
+<ReadingLayout
+  title={reading.data.title}
+  russianTitle={reading.data.russianTitle}
+  author={reading.data.author}
+  month={reading.data.month}
+  volume={reading.data.volume}
+  pages={reading.data.pages}
+  description={reading.data.description}
+  prevReading={prevReading}
+  nextReading={nextReading}
+>
+  <Content />
+</ReadingLayout>

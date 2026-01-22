@@ -1,0 +1,151 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { CalendarGrid } from "../components/index/CalendarGrid";
+import { ContinueButton } from "../components/index/ContinueButton";
+import ThemeToggle from "../components/ThemeToggle";
+import SearchDialog from "../components/SearchDialog";
+import { formatWeekNumber } from "../lib/utils/weeks";
+
+const allReadings = await getCollection("readings");
+
+// Get weekly readings sorted by week number
+const weeklyReadings = allReadings
+  .filter(r => r.data.type === "weekly")
+  .sort((a, b) => {
+    const weekA = a.data.week || (Array.isArray(a.data.number) ? a.data.number[0] : a.data.number) || 0;
+    const weekB = b.data.week || (Array.isArray(b.data.number) ? b.data.number[0] : b.data.number) || 0;
+    return weekA - weekB;
+  });
+
+// Create week info array
+const weeksData = weeklyReadings.map((r, i) => ({
+  week: r.data.week || (Array.isArray(r.data.number) ? r.data.number[0] : r.data.number) || (i + 1),
+  title: r.data.title,
+  russianTitle: r.data.russianTitle,
+  slug: formatWeekNumber(r.data.week || (Array.isArray(r.data.number) ? r.data.number[0] : r.data.number) || (i + 1)),
+  month: r.data.month,
+}));
+
+const months = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+
+// Group by month
+const weeksByMonth = months.map(month => ({
+  month,
+  weeks: weeksData.filter(w => w.month === month),
+}));
+---
+
+<BaseLayout title="Circle of Reading">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="px-5 py-6 flex items-center justify-between">
+      <h1 class="font-sans text-lg font-semibold tracking-tight">
+        Circle of Reading
+      </h1>
+      <div class="flex items-center gap-4">
+        <SearchDialog client:load />
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-5 py-8">
+      <!-- Hero + Continue Button -->
+      <div class="max-w-4xl mx-auto text-center mb-12">
+        <p class="text-xs font-sans font-light uppercase tracking-[0.3em] text-[var(--color-gray-500)] mb-4">
+          Leo Tolstoy
+        </p>
+        <h2 class="font-serif text-3xl md:text-4xl mb-4">
+          Krug Chteniya
+        </h2>
+        <p class="text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] font-serif mb-8">
+          52 weekly readings for a year-long journey through wisdom
+        </p>
+
+        <!-- Continue Button (React component reads state) -->
+        <ContinueButton client:load weeks={weeksData} />
+      </div>
+
+      <!-- 12-Month Grid -->
+      <div class="max-w-6xl mx-auto">
+        <CalendarGrid client:load weeks={weeksData} />
+      </div>
+
+        <!-- Monthly Essays Link -->
+        <div class="max-w-4xl mx-auto mt-16 pt-8 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+          <a href="/monthly/" class="block p-6 hover:bg-[var(--color-gray-900)] light:hover:bg-[var(--color-gray-50)] transition-colors">
+            <span class="text-xs font-sans uppercase tracking-widest text-[var(--color-gray-500)]">
+              Special Collection
+            </span>
+            <h3 class="font-sans text-xl font-semibold mt-2">
+              Monthly Essays
+            </h3>
+            <p class="text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] mt-2 font-serif">
+              8 longer essays and treatises
+            </p>
+          </a>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="px-5 py-12 text-center">
+        <p class="text-xs font-sans font-light text-[var(--color-gray-600)]">
+          Translated from the Russian Jubilee Edition
+        </p>
+      </footer>
+
+    <ThemeToggle client:load />
+  </div>
+</BaseLayout>
+
+<style>
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .calendar-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .calendar-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .month-section {
+    padding: 1.5rem;
+    border: 1px solid var(--color-gray-800);
+  }
+
+  .light .month-section {
+    border-color: var(--color-gray-200);
+  }
+
+  .month-header {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    color: var(--color-gray-400);
+  }
+
+  .light .month-header {
+    color: var(--color-gray-500);
+  }
+
+  .week-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+</style>

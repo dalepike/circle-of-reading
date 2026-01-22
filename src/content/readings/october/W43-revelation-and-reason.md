@@ -1,0 +1,59 @@
+---
+week: 43
+title: "Revelation and Reason"
+russianTitle: "Otkrovenie i razum"
+author: "Jean-Jacques Rousseau (from *The Profession of Faith of the Savoyard Vicar*)"
+month: "october"
+type: "weekly"
+volume: 42
+pages: "176-180"
+slug: "W43-revelation-and-reason"
+---
+
+*(From "The Profession of Faith of the Savoyard Vicar" by Rousseau)*
+
+What is passed off as the revelation of God only degrades God by attributing human passions to him. Instead of clarifying our conception of the Great Being, particular dogmas only confuse it; instead of ennobling our idea of God, they debase it; to the incomprehensible mysteries that surround him, they add senseless contradictions that make man proud, intolerant, and cruel; instead of establishing peace on earth, they bring conflict. I ask myself why this is, and I do not know what to answer. I see in this only the crimes of men and the misfortune of humanity.
+
+I am told that revelation was necessary to teach people how to serve God; as proof of this they cite the diversity of beliefs that have been established in the world, and do not wish to see that this diversity comes precisely from revelations. As soon as nations took it into their heads to make God speak, each one made him speak in his own way and made him say what he himself wanted. If we listened only to what God says in the heart of man, there would be only one religion on earth.
+
+They say: there must be uniformity of worship; but the worship that God demands is the worship of the heart; it is always uniform if it is sincere. It is foolish to imagine that it matters so much to God what the priest wears, the sequence of words he pronounces, the movements he makes before the altar, and his genuflections. No, my friend, stand upright and you will still be close enough to the earth. God wants to be worshiped in spirit and in truth, and this is the duty of all religions, all countries, and all people.
+
+Examining the development of sects that reign on earth and that mutually accuse each other of falsehood and error, I asked: which of them is the true one? And each answered me: mine. Each said: "Only I and my followers think correctly, all the rest are mistaken." But how do you know that your sect is the true one? "Because God said so." And who told you that God said so? "My priest, who knows well. My priest tells me to believe as he tells me—and so I believe; he assures me that all who do not agree with him are lying, and I do not listen to them."
+
+What! I thought: is not truth one? And what is just among us can be unjust among you? If the method of conviction of one who walks the right path and one who errs is the same, then what distinguishes one from the other? Choice, then, is a matter of chance; and to accuse people for this means accusing them for being born in one country rather than another.
+
+Either all religions are good and pleasing to God, or there is one that he himself prescribed to people and for the non-recognition of which he punishes; in that case he surely gave indisputable and evident signs by which this true religion can be recognized. These signs must be equally accessible to all people, great and small, learned and ignorant, Europeans, Indians, Africans, and savages.
+
+If there were a religion on earth the non-profession of which brings eternal torment, and if anywhere there is even one mortal sincerely seeking the truth who is not convinced by its evidence, then the God of such a religion is the most cruel and unjust tyrant.
+
+I am told: "Submit your reason." But only one who deceives me can say this to me. I need proof to submit my reason.
+
+Since all people are of the same kind as I, everything that man can grasp by natural means I too can grasp, and any man can err just as I can: if I believe what I am told, it is not because this or that person tells me, but because he proves to me what he says. And therefore the testimonies of people are in essence only the testimonies of my own reason and add nothing to the natural means that God has given me for knowing the truth. Apostles of truth, what can you tell me of which I would not be the judge? "God himself said this: listen to his revelation. This is how God said it." These are great words, but to whom did he say this? "He said it to people." Why then have I heard nothing of it? "He entrusted other people to convey his words to you." Good: so people will tell me what God said? Would it not have been better if God had told me directly? It would have been no harder for him, and I would have been spared the possibility of deception. "But he attests the truth of his words by confirming the mission of his apostles." How? "By miracles." Where are these miracles? "In books." And who made these books? "People." And who saw these miracles? "People who affirm them." What, again human testimonies! All people who tell me what other people tell them. How many people between God and me! Still, let us examine, let us compare. Ah, if God had spared me all this labor, would I have served him with any less zeal!
+
+And note what a terrible reasoning we are now drawn into, what learning is needed to distinguish all these antiquities, to examine, weigh, compare prophecies, revelations, facts, all the monuments of faith offered in all the countries of the world, in order to determine time, place, authors, and circumstances. What precision of criticism one must have to distinguish between monuments genuine and supposed, to compare objections with answers, translations with originals; to judge the impartiality of witnesses, their good sense, their enlightenment; to determine whether anything has been omitted, added, or rearranged; to resolve the contradictions that remain; to judge the significance of opponents' silence, of what was said against them, to know whether they knew what was said against them, etc. etc.
+
+Having finally acknowledged these monuments as indubitable, we shall have to proceed to proofs of the actual mission of their authors. One must know the probabilities of prophecy being fulfilled without miraculous intervention; one must know the spirit of languages to be able to distinguish what in them is prophecy and what is merely rhetorical form, what events are natural and what supernatural; one must determine to what degree a clever man could deceive the eyes of simple people or astonish even educated people; one must find the marks of a genuine miracle and that degree of authenticity by which it must be acknowledged and for the non-acknowledgment of which one may be punished; one must compare the proofs of true and false miracles, find sure rules to distinguish them; one must finally decide why God, to confirm his word, employs means that themselves need confirmation, as if he deliberately amuses people and intentionally avoids the means that could convince them.
+
+Let us suppose that the majesty of God can descend to making one man the organ of his sacred will: is it reasonable, is it just to demand that the whole human race obey the voice of this chosen one without making his calling evident? Is it just, to confirm his calling, to perform a few special signs before a small number of obscure people, while all the rest of humanity learns of it only by hearsay? If we were to acknowledge as just all the miracles that the common people and the ignorant say they have seen, then every sect would be the only true one and there would be more miracles than natural events. The unchanging order of things confirms me more than anything in the recognition of divine wisdom. If this order admitted so many exceptions, I would not know what to think of it, and I believe too firmly in God to believe in such a multitude of miracles unworthy of him. The miracles of which you speak were performed in dark corners, in deserts, where it is easy to astonish spectators already ready to believe anything. Who will tell me how many eyewitnesses are needed to make a miracle credible? If your miracles, which are made to prove your teaching, still need proof themselves, what are they for? They might as well not have been performed at all.
+
+It remains now to consider the most important question in the proclaimed teaching, namely this: if those who say that God performs miracles also say that the devil often imitates them, then even the best-attested miracles do not settle the matter; and since Pharaoh's magicians, in Moses's very presence, produced the same miracles that he did by God's will, nothing prevented them from claiming, in Moses's absence, that their miracles were done in God's name. So that, having proved the teaching by miracles, in order not to confuse the devil's work with God's work, one must prove the miracles by the teaching.
+
+A teaching proceeding from God must have a sacred, divine character. It must not only clarify our confused notions of the divinity, but it must offer us a moral teaching and rules corresponding to the attributes we ascribe to the divinity.
+
+So if the teaching presented us with only senseless propositions, if it aroused in us a feeling of aversion to our fellow men, if it presented us with a wrathful, jealous, vengeful, partial God who hates men, a god of war and battles, always ready to destroy and crush, always speaking of torments and punishments and boasting of punishing the innocent, my heart would not be drawn to such a terrible god. Your god is not my god, I would say to these sectarians. A God who begins by choosing one nation for himself and excluding the rest of humanity cannot be the common Father of men; he who destines the majority of his creatures to eternal torment is not the merciful and good God that my reason has revealed to me.
+
+Regarding dogmas, reason tells me that they must be clear, transparent, and striking in their evidence. Faith is established by understanding; the best of all religions is the clearest; the one that fills the worship it preaches with mysteries and contradictions makes me for this very reason distrust it. The God I worship is not a god of darkness; he gave me reason not to forbid me the use of it. When I am told to submit my reason, I see in this an insult to its Creator.
+
+*—Jean-Jacques Rousseau*
+
+---
+
+**Translator's Notes:**
+- "The Profession of Faith of the Savoyard Vicar" (*Profession de foi du vicaire savoyard*) is a celebrated philosophical text within Rousseau's educational treatise *Emile, or On Education* (1762). The Vicar is a Catholic priest who, having lost faith in revealed religion, articulates a deist philosophy based on natural religion, conscience, and reason.
+- The text was condemned by both Catholic and Protestant authorities. The Archbishop of Paris ordered it burned; Geneva banned both *Emile* and *The Social Contract*; Rousseau was forced into exile.
+- The central argument—that "revelation" leads to religious diversity and conflict while natural reason would lead to unity—was radical in the 18th century and remains influential. Tolstoy adopted this position throughout his religious writings.
+- The critique of miracles anticipates David Hume's more systematic argument in "Of Miracles" (published in 1748 but widely circulated). Rousseau argues that miracles require more evidence to prove than the teachings they supposedly support.
+- The reference to Pharaoh's magicians replicating Moses's miracles (Exodus 7:11-12, 7:22, 8:7) was a standard deist argument: if miracles can be performed by both divine and demonic agents, they cannot serve as reliable evidence for divine authority.
+- Tolstoy saw in this text a fundamental critique of institutional Christianity that aligned with his own rejection of church dogma in favor of the ethical teachings of Jesus as discerned by reason and conscience.
+- The Vicar's conclusion that God gave reason "not to forbid me the use of it" became a touchstone for Enlightenment religious thought and was central to Tolstoy's own theology.
+

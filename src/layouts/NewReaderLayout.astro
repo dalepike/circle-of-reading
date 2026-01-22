@@ -1,0 +1,298 @@
+---
+/**
+ * NewReaderLayout - Modern reading experience for Circle of Reading
+ *
+ * Features:
+ * - ProgressRail: Vertical navigation with W01-W52 progress indicators
+ * - MicroHeader: Sticky minimal header with navigation
+ * - JumpDrawer: Quick week selection overlay
+ * - SmartNext: Intelligent next reading panel
+ * - Beautiful typography preserved from original ReadingLayout
+ *
+ * All components use ReadingProvider for coordinated state management
+ */
+
+import BaseLayout from "./BaseLayout.astro";
+import ThemeToggle from "../components/ThemeToggle";
+import ReaderApp from "../components/reader/ReaderApp";
+
+interface WeekInfo {
+  week: number;
+  title: string;
+  russianTitle?: string;
+  slug: string;
+  month: string;
+}
+
+interface Props {
+  week: number;
+  title: string;
+  russianTitle?: string;
+  author?: string;
+  month: string;
+  volume?: number;
+  pages?: string;
+  description?: string;
+  prevWeek: WeekInfo | null;
+  nextWeek: WeekInfo | null;
+  allWeeks: WeekInfo[];
+}
+
+const {
+  week,
+  title,
+  russianTitle,
+  author,
+  month,
+  volume,
+  pages,
+  description,
+  prevWeek,
+  nextWeek,
+  allWeeks,
+} = Astro.props;
+
+const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+const weekFormatted = `W${week.toString().padStart(2, "0")}`;
+---
+
+<BaseLayout title={`${weekFormatted} · ${title}`} description={description}>
+  <!-- React Reader App (hydrated as island) -->
+  <ReaderApp
+    client:load
+    currentWeek={week}
+    title={title}
+    russianTitle={russianTitle}
+    month={capitalizedMonth}
+    volume={volume}
+    prevWeek={prevWeek}
+    nextWeek={nextWeek}
+    allWeeks={allWeeks}
+  />
+
+  <!-- Main content area -->
+  <div class="reader-layout">
+    <div class="content-area">
+      <main class="reading-main">
+        <article class="prose">
+          <!-- Reading Header -->
+          <header class="reading-header">
+            <!-- Week badge -->
+            <div class="week-badge">
+              <a
+                href={`/${month}/`}
+                class="hover:opacity-70 transition-opacity duration-200"
+              >
+                {capitalizedMonth}
+              </a>
+              <span class="mx-3 opacity-30">/</span>
+              <span>Week {week}</span>
+            </div>
+
+            <!-- Main title -->
+            <h1 class="!mb-4">
+              {title}
+            </h1>
+
+            <!-- Russian title (optional) -->
+            {russianTitle && (
+              <p class="font-serif text-xl italic text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] mt-3 mb-0">
+                {russianTitle}
+              </p>
+            )}
+
+            <!-- Metadata (author, volume, pages) -->
+            {(author || volume) && (
+              <div class="metadata-bar">
+                {author && <span>{author}</span>}
+                {volume && pages && <span class="mx-3 opacity-30">|</span>}
+                {volume && pages && <span>Vol. {volume}, pp. {pages}</span>}
+                {volume && !pages && <span class="mx-3 opacity-30">|</span>}
+                {volume && !pages && <span>Vol. {volume}</span>}
+              </div>
+            )}
+          </header>
+
+          <!-- Reading Content (slot for MDX) -->
+          <div class="reading-content">
+            <slot />
+          </div>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- Theme Toggle (fixed position) -->
+  <div class="fixed bottom-6 right-6 z-30">
+    <ThemeToggle client:load />
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Translated from the Russian Jubilee Edition
+    </p>
+  </footer>
+</BaseLayout>
+
+<style>
+  /* =====================================================
+     Reader Layout Grid & Structure
+     ===================================================== */
+
+  .reader-layout {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Main content area - offset for rail on desktop */
+  .content-area {
+    margin-left: 5rem; /* Match rail width */
+    max-width: calc(var(--reading-width) + 4rem);
+    margin-right: auto;
+    padding: 0 2rem;
+    position: relative;
+  }
+
+  /* Reading main content */
+  .reading-main {
+    padding: 6rem 0 8rem; /* Extra top padding for sticky header */
+    position: relative;
+  }
+
+  /* =====================================================
+     Reading Header Styling
+     ===================================================== */
+
+  .reading-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .week-badge {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--color-gray-400);
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .metadata-bar {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--color-gray-400);
+    letter-spacing: 0.02em;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-gray-800);
+    display: inline-block;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .light .metadata-bar {
+    border-color: var(--color-gray-200);
+    color: var(--color-gray-500);
+  }
+
+  /* =====================================================
+     Responsive Layout
+     ===================================================== */
+
+  /* Mobile: no rail offset, full width content */
+  @media (max-width: 768px) {
+    .content-area {
+      margin-left: 0;
+      padding: 0 1.25rem;
+    }
+
+    .reading-main {
+      padding: 5rem 0 6rem;
+    }
+  }
+
+  /* Tablet: narrower rail */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .content-area {
+      margin-left: 5rem;
+    }
+  }
+
+  /* =====================================================
+     Reading Content Enhancements
+     (Preserving beautiful typography from ReadingLayout)
+     ===================================================== */
+
+  /* First paragraph - larger with drop cap */
+  .reading-content > :global(p:first-of-type) {
+    font-size: 1.375rem;
+  }
+
+  .reading-content > :global(p:first-of-type::first-letter) {
+    font-size: 3.5rem;
+    float: left;
+    line-height: 1;
+    padding-right: 0.5rem;
+    padding-top: 0.1rem;
+    font-weight: 500;
+  }
+
+  /* Translator notes section */
+  :global(.translator-notes) {
+    margin-top: 4rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--color-gray-800);
+    font-size: 1rem;
+    color: var(--color-gray-400);
+  }
+
+  :global(.light .translator-notes) {
+    border-color: var(--color-gray-200);
+    color: var(--color-gray-500);
+  }
+
+  :global(.translator-notes h2) {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-gray-500);
+    margin-bottom: 1.25rem;
+  }
+
+  :global(.light .translator-notes h2) {
+    color: var(--color-gray-400);
+  }
+
+  /* =====================================================
+     Footer
+     ===================================================== */
+
+  footer {
+    padding: 4rem 1.25rem;
+    text-align: center;
+    border-top: 1px solid var(--color-gray-800);
+    margin-left: 5rem;
+  }
+
+  .light footer {
+    border-color: var(--color-gray-200);
+  }
+
+  footer p {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--color-gray-600);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 768px) {
+    footer {
+      margin-left: 0;
+    }
+  }
+</style>

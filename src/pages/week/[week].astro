@@ -1,0 +1,82 @@
+---
+import { getCollection, render } from "astro:content";
+import NewReaderLayout from "../../layouts/NewReaderLayout.astro";
+import { getMonth, formatWeekNumber } from "../../lib/utils/weeks";
+
+export async function getStaticPaths() {
+  const allReadings = await getCollection("readings");
+
+  // Filter to weekly readings only
+  const weeklyReadings = allReadings
+    .filter(r => r.data.type === "weekly")
+    .sort((a, b) => {
+      // Sort by week number
+      const weekA = a.data.week || 0;
+      const weekB = b.data.week || 0;
+      return weekA - weekB;
+    });
+
+  return weeklyReadings.map((reading, index) => {
+    const weekNum = reading.data.week || (index + 1);
+
+    const prev = index > 0 ? weeklyReadings[index - 1] : null;
+    const next = index < weeklyReadings.length - 1 ? weeklyReadings[index + 1] : null;
+
+    // Build prev/next info with month
+    const prevWeek = prev ? {
+      week: prev.data.week || index,
+      title: prev.data.title,
+      russianTitle: prev.data.russianTitle,
+      slug: formatWeekNumber(prev.data.week || index),
+      month: prev.data.month,
+    } : null;
+
+    const nextWeek = next ? {
+      week: next.data.week || (index + 2),
+      title: next.data.title,
+      russianTitle: next.data.russianTitle,
+      slug: formatWeekNumber(next.data.week || (index + 2)),
+      month: next.data.month,
+    } : null;
+
+    // Build all weeks array for jump drawer
+    const allWeeks = weeklyReadings.map((r, i) => ({
+      week: r.data.week || (i + 1),
+      title: r.data.title,
+      russianTitle: r.data.russianTitle,
+      slug: formatWeekNumber(r.data.week || (i + 1)),
+      month: r.data.month,
+    }));
+
+    return {
+      params: { week: formatWeekNumber(weekNum) }, // W01, W02, etc.
+      props: {
+        reading,
+        weekNum,
+        prevWeek,
+        nextWeek,
+        allWeeks,
+      },
+    };
+  });
+}
+
+const { reading, weekNum, prevWeek, nextWeek, allWeeks } = Astro.props;
+const { Content } = await render(reading);
+---
+
+<NewReaderLayout
+  week={weekNum}
+  title={reading.data.title}
+  russianTitle={reading.data.russianTitle}
+  author={reading.data.author}
+  month={reading.data.month}
+  volume={reading.data.volume}
+  pages={reading.data.pages}
+  description={reading.data.description}
+  prevWeek={prevWeek}
+  nextWeek={nextWeek}
+  allWeeks={allWeeks}
+>
+  <Content />
+</NewReaderLayout>

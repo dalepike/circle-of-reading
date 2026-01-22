@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from "astro:content";
+import ReadingLayout from "../../layouts/ReadingLayout.astro";
+
+export async function getStaticPaths() {
+  const allReadings = await getCollection("readings");
+
+  // Build a sorted list for prev/next navigation
+  const weeklyReadings = allReadings
+    .filter((r) => r.data.type === "weekly")
+    .sort((a, b) => {
+      const numA = Array.isArray(a.data.number) ? a.data.number[0] : (a.data.number || 0);
+      const numB = Array.isArray(b.data.number) ? b.data.number[0] : (b.data.number || 0);
+      return numA - numB;
+    });
+
+  return weeklyReadings.map((reading, index) => {
+    const prevReading = index > 0 ? weeklyReadings[index - 1] : null;
+    const nextReading = index < weeklyReadings.length - 1 ? weeklyReadings[index + 1] : null;
+
+    return {
+      params: {
+        month: reading.data.month,
+        slug: reading.data.slug,
+      },
+      props: {
+        reading,
+        prevReading: prevReading
+          ? {
+              title: prevReading.data.title,
+              slug: prevReading.data.slug,
+              month: prevReading.data.month,
+            }
+          : null,
+        nextReading: nextReading
+          ? {
+              title: nextReading.data.title,
+              slug: nextReading.data.slug,
+              month: nextReading.data.month,
+            }
+          : null,
+      },
+    };
+  });
+}
+
+const { reading, prevReading, nextReading } = Astro.props;
+const { Content } = await render(reading);
+---
+
+<ReadingLayout
+  title={reading.data.title}
+  russianTitle={reading.data.russianTitle}
+  author={reading.data.author}
+  month={reading.data.month}
+  number={reading.data.number}
+  volume={reading.data.volume}
+  pages={reading.data.pages}
+  description={reading.data.description}
+  prevReading={prevReading}
+  nextReading={nextReading}
+>
+  <Content />
+</ReadingLayout>

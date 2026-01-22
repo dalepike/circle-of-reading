@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="#fdfbf7" stroke="#b5923a" stroke-width="3"/>
+  <text x="50" y="66" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#2d2a26">T</text>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      circle { fill: #1a1a1f; stroke: #c9a855; }
+      text { fill: #faf6ee; }
+    }
+  </style>
+</svg>

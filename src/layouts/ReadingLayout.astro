@@ -1,0 +1,128 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Navigation from "../components/Navigation.astro";
+import ThemeToggle from "../components/ThemeToggle";
+
+interface Props {
+  title: string;
+  russianTitle?: string;
+  author?: string;
+  month: string;
+  number?: number | number[];
+  volume?: number;
+  pages?: string;
+  description?: string;
+  prevReading?: { title: string; slug: string; month: string };
+  nextReading?: { title: string; slug: string; month: string };
+}
+
+const {
+  title,
+  russianTitle,
+  author,
+  month,
+  number,
+  volume,
+  pages,
+  description,
+  prevReading,
+  nextReading,
+} = Astro.props;
+
+const displayNumber = Array.isArray(number) ? number.join("-") : number;
+const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen flex flex-col">
+    <Navigation currentMonth={month} />
+
+    <main class="flex-1 px-5 py-12 md:py-20">
+      <article class="prose">
+        <!-- Header -->
+        <header class="mb-16 text-center">
+          <div class="metadata mb-8">
+            <a
+              href={`/${month}/`}
+              class="hover:opacity-70 transition-opacity duration-200"
+            >
+              {capitalizedMonth}
+            </a>
+            {displayNumber && <span class="mx-3 opacity-30">/</span>}
+            {displayNumber && <span>Reading {displayNumber}</span>}
+          </div>
+
+          <h1 class="!mb-4">
+            {title}
+          </h1>
+
+          {russianTitle && (
+            <p class="font-serif text-xl italic text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] mt-3 mb-0">
+              {russianTitle}
+            </p>
+          )}
+
+          {(author || volume) && (
+            <div class="metadata mt-10 pt-8 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)] inline-block px-10">
+              {author && <span>{author}</span>}
+              {volume && pages && <span class="mx-3 opacity-30">|</span>}
+              {volume && pages && <span>Vol. {volume}, pp. {pages}</span>}
+              {volume && !pages && <span class="mx-3 opacity-30">|</span>}
+              {volume && !pages && <span>Vol. {volume}</span>}
+            </div>
+          )}
+        </header>
+
+        <!-- Content -->
+        <div class="reading-content">
+          <slot />
+        </div>
+
+        <!-- Navigation -->
+        <nav class="mt-20 pt-12 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+          <div class="flex justify-between items-stretch gap-8">
+            {prevReading ? (
+              <a
+                href={`/${prevReading.month}/${prevReading.slug}/`}
+                class="group flex-1 flex flex-col items-start p-5 -m-5 hover:bg-[var(--color-gray-900)] light:hover:bg-[var(--color-gray-50)] transition-all duration-200"
+              >
+                <span class="text-[var(--color-gray-500)] text-xs font-sans font-light uppercase tracking-widest mb-3">
+                  Previous
+                </span>
+                <span class="font-serif text-lg group-hover:opacity-70 transition-opacity duration-200">
+                  {prevReading.title}
+                </span>
+              </a>
+            ) : (
+              <div class="flex-1" />
+            )}
+
+            {nextReading ? (
+              <a
+                href={`/${nextReading.month}/${nextReading.slug}/`}
+                class="group flex-1 flex flex-col items-end text-right p-5 -m-5 hover:bg-[var(--color-gray-900)] light:hover:bg-[var(--color-gray-50)] transition-all duration-200"
+              >
+                <span class="text-[var(--color-gray-500)] text-xs font-sans font-light uppercase tracking-widest mb-3">
+                  Next
+                </span>
+                <span class="font-serif text-lg group-hover:opacity-70 transition-opacity duration-200">
+                  {nextReading.title}
+                </span>
+              </a>
+            ) : (
+              <div class="flex-1" />
+            )}
+          </div>
+        </nav>
+      </article>
+    </main>
+
+    <footer class="px-5 py-16 text-center">
+      <p class="text-xs font-sans font-light text-[var(--color-gray-600)] tracking-wide">
+        Translated from the Russian Jubilee Edition
+      </p>
+    </footer>
+
+    <ThemeToggle client:load />
+  </div>
+</BaseLayout>

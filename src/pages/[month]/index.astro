@@ -1,0 +1,117 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/Navigation.astro";
+import ReadingCard from "../../components/ReadingCard.astro";
+import ThemeToggle from "../../components/ThemeToggle";
+
+export async function getStaticPaths() {
+  const months = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december"
+  ];
+
+  return months.map((month) => ({
+    params: { month },
+  }));
+}
+
+const { month } = Astro.params;
+const capitalizedMonth = month!.charAt(0).toUpperCase() + month!.slice(1);
+
+const allReadings = await getCollection("readings");
+
+const monthReadings = allReadings
+  .filter((r) => r.data.month === month && r.data.type === "weekly")
+  .sort((a, b) => {
+    const numA = Array.isArray(a.data.number) ? a.data.number[0] : (a.data.number || 0);
+    const numB = Array.isArray(b.data.number) ? b.data.number[0] : (b.data.number || 0);
+    return numA - numB;
+  });
+
+// Get previous and next months
+const months = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+const currentIndex = months.indexOf(month!);
+const prevMonth = currentIndex > 0 ? months[currentIndex - 1] : null;
+const nextMonth = currentIndex < 11 ? months[currentIndex + 1] : null;
+---
+
+<BaseLayout title={capitalizedMonth}>
+  <div class="min-h-screen flex flex-col">
+    <Navigation currentMonth={month} />
+
+    <main class="flex-1 px-5 py-12 md:py-20">
+      <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <header class="mb-12">
+          <h1 class="font-sans text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            {capitalizedMonth}
+          </h1>
+          <p class="font-sans font-light text-[var(--color-gray-400)] light:text-[var(--color-gray-500)]">
+            {monthReadings.length} weekly readings
+          </p>
+        </header>
+
+        <!-- Readings Grid -->
+        <div class="grid gap-4 sm:grid-cols-2">
+          {monthReadings.map((reading) => (
+            <ReadingCard
+              title={reading.data.title}
+              russianTitle={reading.data.russianTitle}
+              author={reading.data.author}
+              month={reading.data.month}
+              slug={reading.data.slug}
+              number={reading.data.number}
+              description={reading.data.description}
+            />
+          ))}
+        </div>
+
+        <!-- Month Navigation -->
+        <nav class="mt-16 pt-10 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+          <div class="flex justify-between items-center font-sans text-sm font-light">
+            {prevMonth ? (
+              <a
+                href={`/${prevMonth}/`}
+                class="text-[var(--color-gray-400)] hover:text-white light:hover:text-black transition-colors duration-200"
+              >
+                &larr; {prevMonth.charAt(0).toUpperCase() + prevMonth.slice(1)}
+              </a>
+            ) : (
+              <div />
+            )}
+
+            <a
+              href="/"
+              class="text-[var(--color-gray-500)] hover:text-white light:hover:text-black transition-colors duration-200"
+            >
+              All Months
+            </a>
+
+            {nextMonth ? (
+              <a
+                href={`/${nextMonth}/`}
+                class="text-[var(--color-gray-400)] hover:text-white light:hover:text-black transition-colors duration-200"
+              >
+                {nextMonth.charAt(0).toUpperCase() + nextMonth.slice(1)} &rarr;
+              </a>
+            ) : (
+              <div />
+            )}
+          </div>
+        </nav>
+      </div>
+    </main>
+
+    <footer class="px-5 py-16 text-center">
+      <p class="text-xs font-sans font-light text-[var(--color-gray-600)] tracking-wide">
+        Translated from the Russian Jubilee Edition
+      </p>
+    </footer>
+
+    <ThemeToggle client:load />
+  </div>
+</BaseLayout>

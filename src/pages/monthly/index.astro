@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/Navigation.astro";
+import ReadingCard from "../../components/ReadingCard.astro";
+import ThemeToggle from "../../components/ThemeToggle";
+
+const allReadings = await getCollection("readings");
+
+// Get monthly readings and sort by month order
+const months = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];
+
+const monthlyReadings = allReadings
+  .filter((r) => r.data.type === "monthly")
+  .sort((a, b) => {
+    const monthIndexA = months.indexOf(a.data.month);
+    const monthIndexB = months.indexOf(b.data.month);
+    return monthIndexA - monthIndexB;
+  });
+---
+
+<BaseLayout title="Monthly Readings">
+  <div class="min-h-screen flex flex-col">
+    <Navigation />
+
+    <main class="flex-1 px-5 py-12 md:py-20">
+      <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <header class="mb-12">
+          <h1 class="font-sans text-3xl md:text-4xl font-semibold tracking-tight mb-6">
+            Monthly Readings
+          </h1>
+          <p class="font-serif text-lg text-[var(--color-gray-300)] light:text-[var(--color-gray-600)] leading-relaxed">
+            Longer essays and treatises that Tolstoy placed at the end of each month in the
+            <em>Circle of Reading</em>. Many of these were censored from the original 1906 edition
+            and restored only in the Jubilee Edition.
+          </p>
+        </header>
+
+        <!-- Readings List -->
+        <div class="space-y-4">
+          {monthlyReadings.map((reading) => (
+            <ReadingCard
+              title={reading.data.title}
+              russianTitle={reading.data.russianTitle}
+              author={reading.data.author}
+              month="monthly"
+              slug={reading.data.slug}
+              description={reading.data.description}
+            />
+          ))}
+        </div>
+
+        <!-- Back Link -->
+        <div class="mt-16 pt-10 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+          <a
+            href="/"
+            class="inline-flex items-center gap-3 text-sm font-sans font-light text-[var(--color-gray-400)] hover:text-white light:hover:text-black transition-colors duration-200"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to all readings
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="px-5 py-16 text-center">
+      <p class="text-xs font-sans font-light text-[var(--color-gray-600)] tracking-wide">
+        Translated from the Russian Jubilee Edition
+      </p>
+    </footer>
+
+    <ThemeToggle client:load />
+  </div>
+</BaseLayout>

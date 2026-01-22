@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  russianTitle?: string;
+  author?: string;
+  month: string;
+  slug: string;
+  number?: number | number[];
+  description?: string;
+}
+
+const { title, russianTitle, author, month, slug, number, description } = Astro.props;
+
+const displayNumber = Array.isArray(number) ? number.join("-") : number;
+const href = `/${month}/${slug}/`;
+---
+
+<a href={href} class="block reading-card group">
+  <div class="flex flex-col">
+    {displayNumber && (
+      <span class="text-xs font-sans font-light text-[var(--color-gray-500)] uppercase tracking-widest mb-4">
+        {displayNumber}
+      </span>
+    )}
+
+    <h3 class="font-serif text-xl leading-snug group-hover:opacity-70 transition-opacity duration-200">
+      {title}
+    </h3>
+
+    {russianTitle && (
+      <p class="font-serif text-sm italic text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] mt-2">
+        {russianTitle}
+      </p>
+    )}
+
+    {author && (
+      <p class="text-xs text-[var(--color-gray-500)] mt-5 font-sans font-light tracking-wide">
+        {author}
+      </p>
+    )}
+
+    {description && (
+      <p class="font-serif text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] mt-4 line-clamp-2 leading-relaxed">
+        {description}
+      </p>
+    )}
+  </div>
+</a>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
