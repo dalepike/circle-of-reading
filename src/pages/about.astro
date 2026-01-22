@@ -1,0 +1,103 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navigation from "../components/Navigation.astro";
+import ThemeToggle from "../components/ThemeToggle";
+---
+
+<BaseLayout title="About - Circle of Reading">
+  <div class="min-h-screen flex flex-col">
+    <Navigation />
+
+    <main class="flex-1 px-5 py-12 md:py-20">
+      <div class="max-w-3xl mx-auto prose">
+        <!-- Header -->
+        <header class="mb-12">
+          <h1 class="font-sans text-3xl md:text-4xl font-semibold tracking-tight mb-6">
+            About This Project
+          </h1>
+        </header>
+
+        <!-- The Work -->
+        <section class="mb-12">
+          <h2>The Circle of Reading</h2>
+          <p>
+            <em>Круг чтения</em> (Circle of Reading) is a collection of daily readings compiled by Leo Tolstoy between 1904 and 1908. Originally published in Russian in 1906, it represents Tolstoy's attempt to distill the wisdom of the world's great thinkers into a year-long course of spiritual and moral education.
+          </p>
+          <p>
+            The work draws from an extraordinary range of sources: ancient philosophers (Epictetus, Marcus Aurelius, Seneca), religious texts (the Gospels, the Tao Te Ching, Buddhist sutras), and modern thinkers (Emerson, Thoreau, Ruskin, Schopenhauer). Tolstoy also included his own writings, often adapting or condensing them for this collection.
+          </p>
+          <p>
+            Each day's reading is organized around a theme&mdash;love, death, labor, reason, faith, non-violence&mdash;with short passages from multiple authors followed by Tolstoy's own reflections. The weekly readings presented here are the longer essays that conclude each week, offering deeper explorations of these themes.
+          </p>
+        </section>
+
+        <!-- This Translation -->
+        <section class="mb-12">
+          <h2>This Translation</h2>
+          <p>
+            The translations presented here are based on the <strong>Jubilee Edition</strong> (Полное собрание сочинений, 1928&ndash;1958), the definitive 90-volume scholarly edition of Tolstoy's complete works. The <em>Circle of Reading</em> appears in volumes 41&ndash;42.
+          </p>
+          <p>
+            The Jubilee Edition restores material that was censored from the original 1906 publication, including Tolstoy's critiques of the Orthodox Church and the Russian state. These translations aim to present the complete, uncensored text in clear, contemporary English while preserving Tolstoy's distinctive voice.
+          </p>
+        </section>
+
+        <!-- Site Navigation -->
+        <section class="mb-12">
+          <h2>Navigating This Site</h2>
+
+          <h3>Weekly Readings</h3>
+          <p>
+            The 52 weekly readings are organized by month, reflecting Tolstoy's original structure. Each week's reading concludes that week's daily meditations with a longer essay or story.
+          </p>
+          <ul>
+            <li><strong>Home page calendar:</strong> Click any month to see its weeks, then click a week number to read</li>
+            <li><strong>Continue reading:</strong> The button on the home page takes you to the current week of the year</li>
+            <li><strong>Week navigation:</strong> Within a reading, use the arrows or swipe to move between weeks</li>
+          </ul>
+
+          <h3>Monthly Essays</h3>
+          <p>
+            Eight longer essays and treatises that Tolstoy placed at the end of certain months. Access these from the "Monthly Essays" link at the bottom of the home page.
+          </p>
+
+          <h3>Search</h3>
+          <p>
+            Use the search icon in the header to find readings by title, author, or theme.
+          </p>
+
+          <h3>Reading Progress</h3>
+          <p>
+            Your reading progress is saved locally in your browser. Completed weeks show a checkmark on the calendar grid. This data stays on your device and is not sent anywhere.
+          </p>
+
+          <h3>Light &amp; Dark Mode</h3>
+          <p>
+            Toggle between light and dark themes using the button in the bottom-right corner. Your preference is saved for future visits.
+          </p>
+        </section>
+
+        <!-- Back Link -->
+        <div class="mt-16 pt-10 border-t border-[var(--color-gray-800)] light:border-[var(--color-gray-200)]">
+          <a
+            href="/"
+            class="inline-flex items-center gap-3 text-sm font-sans font-light text-[var(--color-gray-400)] hover:text-white light:hover:text-black transition-colors duration-200"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to all readings
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="px-5 py-16 text-center">
+      <p class="text-xs font-sans font-light text-[var(--color-gray-600)] tracking-wide">
+        Translated from the Russian Jubilee Edition
+      </p>
+    </footer>
+
+    <ThemeToggle client:load />
+  </div>
+</BaseLayout>

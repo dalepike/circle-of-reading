@@ -315,6 +315,17 @@ nav {
   background-color: var(--color-gray-50);
 }
 
+/* Continue Button - Override link colors */
+.continue-button {
+  background-color: var(--color-white);
+  color: var(--color-black) !important;
+}
+
+.light .continue-button {
+  background-color: var(--color-black);
+  color: var(--color-white) !important;
+}
+
 /* Focus styles */
 a:focus-visible,
 button:focus-visible {

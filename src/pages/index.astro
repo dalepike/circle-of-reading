@@ -58,10 +58,13 @@ const weeksByMonth = months.map(month => ({
         <p class="text-xs font-sans font-light uppercase tracking-[0.3em] text-[var(--color-gray-500)] mb-4">
           Leo Tolstoy
         </p>
-        <h2 class="font-serif text-3xl md:text-4xl mb-4">
-          Krug Chteniya
+        <h2 class="font-serif text-4xl md:text-5xl mb-2">
+          Круг чтения
         </h2>
-        <p class="text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] font-serif mb-8">
+        <p class="text-lg text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] font-sans font-light tracking-wide mb-4">
+          Circle of Reading
+        </p>
+        <p class="text-[var(--color-gray-500)] light:text-[var(--color-gray-400)] font-serif mb-8">
           52 weekly readings for a year-long journey through wisdom
         </p>
 
@@ -92,9 +95,15 @@ const weeksByMonth = months.map(month => ({
 
       <!-- Footer -->
       <footer class="px-5 py-12 text-center">
-        <p class="text-xs font-sans font-light text-[var(--color-gray-600)]">
+        <p class="text-xs font-sans font-light text-[var(--color-gray-600)] mb-3">
           Translated from the Russian Jubilee Edition
         </p>
+        <a
+          href="/about"
+          class="text-xs font-sans font-light text-[var(--color-gray-500)] hover:text-white light:hover:text-black transition-colors"
+        >
+          About this project
+        </a>
       </footer>
 
     <ThemeToggle client:load />
