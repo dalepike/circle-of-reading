@@ -75,13 +75,14 @@ export function MicroHeader({
     return (
       <header className="sticky top-0 z-50 h-14 bg-black/80 backdrop-blur-sm border-b border-gray-800">
         <div className="h-full max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="w-4 h-4" />
-            <span className="h-4 w-32" />
+          <div className="flex items-center gap-1">
+            <span className="hidden sm:inline px-2 py-1 text-sm font-sans font-semibold">Circle of Reading</span>
+            <span className="w-8 h-8" />
           </div>
+          <span className="h-4 w-32" />
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6" />
-            <span className="w-6 h-6" />
+            <span className="w-8 h-8" />
+            <span className="w-8 h-8" />
           </div>
         </div>
       </header>
@@ -91,14 +92,25 @@ export function MicroHeader({
   return (
     <header className="sticky top-0 z-50 h-14 bg-black/80 backdrop-blur-sm border-b border-gray-800 light:bg-white/80 light:border-gray-200">
       <div className="h-full max-w-7xl mx-auto px-4 flex items-center justify-between">
-        {/* Left Section: Prev Arrow */}
-        <button
-          onClick={onPrevClick}
-          disabled={!hasPrev}
-          className="flex items-center justify-center w-8 h-8 transition-opacity hover:opacity-70 focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-offset-2 disabled:opacity-30 disabled:cursor-not-allowed light:focus-visible:outline-black"
-          aria-label="Previous week"
-          title="Previous week (←)"
-        >
+        {/* Left Section: Home Link + Prev Arrow */}
+        <div className="flex items-center gap-1">
+          {/* Home Link */}
+          <a
+            href="/"
+            className="hidden sm:flex items-center px-2 py-1 text-sm font-sans font-semibold tracking-tight text-white light:text-black transition-opacity hover:opacity-70 focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-offset-2 light:focus-visible:outline-black"
+            title="Home (i)"
+          >
+            Circle of Reading
+          </a>
+
+          {/* Prev Arrow */}
+          <button
+            onClick={onPrevClick}
+            disabled={!hasPrev}
+            className="flex items-center justify-center w-8 h-8 transition-opacity hover:opacity-70 focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-offset-2 disabled:opacity-30 disabled:cursor-not-allowed light:focus-visible:outline-black"
+            aria-label="Previous week"
+            title="Previous week (←)"
+          >
           <svg
             className="w-5 h-5 text-white light:text-black"
             fill="none"
@@ -114,6 +126,7 @@ export function MicroHeader({
             />
           </svg>
         </button>
+        </div>
 
         {/* Center Section: Clickable Week Info (opens Jump Drawer) */}
         <button
