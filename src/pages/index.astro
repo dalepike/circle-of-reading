@@ -46,7 +46,19 @@ const weeksByMonth = months.map(month => ({
       <h1 class="font-sans text-lg font-semibold tracking-tight">
         Circle of Reading
       </h1>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-5">
+        <a
+          href="/monthly/"
+          class="text-xs font-sans font-light uppercase tracking-widest text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] hover:text-white light:hover:text-black transition-colors duration-200 hidden sm:inline"
+        >
+          Monthly
+        </a>
+        <a
+          href="/about/"
+          class="text-xs font-sans font-light uppercase tracking-widest text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] hover:text-white light:hover:text-black transition-colors duration-200 hidden sm:inline"
+        >
+          About
+        </a>
         <SearchDialog client:load />
       </div>
     </header>

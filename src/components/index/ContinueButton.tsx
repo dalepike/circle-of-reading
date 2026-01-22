@@ -86,24 +86,31 @@ function ContinueButtonInner({ weeks }: ContinueButtonProps) {
   const isCompleted = progress && progress.state === 'COMPLETED';
   const hasHistory = Object.keys(state.progress).length > 0;
 
-  // Determine button text
-  let buttonText = `Read This Week: ${continueWeek.title}`;
+  // Determine button text - short version for mobile, full for desktop
+  let shortText = `Read ${formatWeekNumber(continueWeek.week)}`;
+  let fullText = `Read This Week: ${continueWeek.title}`;
+
   if (isInProgress) {
-    buttonText = `Continue ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
+    shortText = `Continue ${formatWeekNumber(continueWeek.week)}`;
+    fullText = `Continue ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
   } else if (isCompleted) {
-    buttonText = `Revisit ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
+    shortText = `Revisit ${formatWeekNumber(continueWeek.week)}`;
+    fullText = `Revisit ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
   } else if (progress && progress.state === 'VISITED') {
-    buttonText = `Read ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
+    shortText = `Read ${formatWeekNumber(continueWeek.week)}`;
+    fullText = `Read ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
   } else if (hasHistory) {
-    buttonText = `Begin ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
+    shortText = `Begin ${formatWeekNumber(continueWeek.week)}`;
+    fullText = `Begin ${formatWeekNumber(continueWeek.week)}: ${continueWeek.title}`;
   }
 
   return (
     <a
       href={`/week/${continueWeek.slug}/`}
-      className="continue-button inline-flex items-center gap-3 px-8 py-4 font-sans text-sm font-medium tracking-wide uppercase hover:opacity-80 transition-opacity duration-200"
+      className="continue-button inline-flex items-center gap-3 px-6 sm:px-8 py-4 font-sans text-sm font-medium tracking-wide uppercase hover:opacity-80 transition-opacity duration-200"
     >
-      <span>{buttonText}</span>
+      <span className="sm:hidden">{shortText}</span>
+      <span className="hidden sm:inline">{fullText}</span>
       <svg
         className="w-4 h-4"
         fill="none"

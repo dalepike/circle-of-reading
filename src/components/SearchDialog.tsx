@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 declare global {
   interface Window {
     pagefind: {
-      init: () => Promise<void>;
+      init?: () => Promise<void>;
+      options?: (opts: { excerptLength?: number }) => Promise<void>;
       search: (query: string) => Promise<{
         results: Array<{
           id: string;
@@ -33,22 +34,35 @@ export default function SearchDialog() {
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Load Pagefind script
+  // Load Pagefind script via module script tag
   useEffect(() => {
     if (pagefindLoaded) return;
 
+    // Create a module script that imports pagefind and exposes it on window
     const script = document.createElement("script");
-    script.src = "/pagefind/pagefind.js";
-    script.onload = async () => {
+    script.type = "module";
+    script.textContent = `
+      import * as pagefind from '/pagefind/pagefind.js';
+      window.pagefind = pagefind;
+      window.dispatchEvent(new Event('pagefind-loaded'));
+    `;
+
+    const handleLoaded = async () => {
       if (window.pagefind) {
-        await window.pagefind.init();
+        try {
+          await window.pagefind.options?.({ excerptLength: 20 });
+        } catch (e) {
+          // options might not exist in all versions
+        }
         setPagefindLoaded(true);
       }
     };
+
+    window.addEventListener('pagefind-loaded', handleLoaded, { once: true });
     document.head.appendChild(script);
 
     return () => {
-      document.head.removeChild(script);
+      window.removeEventListener('pagefind-loaded', handleLoaded);
     };
   }, [pagefindLoaded]);
 
@@ -181,7 +195,7 @@ export default function SearchDialog() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search readings..."
+                placeholder="Search by title, author, or theme..."
                 className="flex-1 bg-transparent text-lg font-serif outline-none placeholder:text-[var(--color-gray-600)]"
               />
               {isLoading && (
