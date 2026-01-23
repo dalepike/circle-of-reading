@@ -15,6 +15,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import ThemeToggle from "../components/ThemeToggle";
 import ReaderApp from "../components/reader/ReaderApp";
+import { NewHerePrompt } from "../components/reader/NewHerePrompt";
 
 interface WeekInfo {
   week: number;
@@ -126,6 +127,9 @@ const weekFormatted = `W${week.toString().padStart(2, "0")}`;
   <div class="fixed bottom-6 right-6 z-30">
     <ThemeToggle client:load />
   </div>
+
+  <!-- New Here Prompt (for deep link visitors) -->
+  <NewHerePrompt client:idle />
 
   <!-- Footer -->
   <footer>
