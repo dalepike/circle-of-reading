@@ -1,0 +1,97 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { WelcomeCTA } from "../components/welcome/WelcomeCTA";
+import { formatWeekNumber } from "../lib/utils/weeks";
+
+const allReadings = await getCollection("readings");
+
+// Get weekly readings sorted by week number
+const weeklyReadings = allReadings
+  .filter(r => r.data.type === "weekly")
+  .sort((a, b) => {
+    const weekA = a.data.week || (Array.isArray(a.data.number) ? a.data.number[0] : a.data.number) || 0;
+    const weekB = b.data.week || (Array.isArray(b.data.number) ? b.data.number[0] : b.data.number) || 0;
+    return weekA - weekB;
+  });
+
+// Create week info array for CTA
+const weeksData = weeklyReadings.map((r, i) => ({
+  week: r.data.week || (Array.isArray(r.data.number) ? r.data.number[0] : r.data.number) || (i + 1),
+  title: r.data.title,
+  slug: formatWeekNumber(r.data.week || (Array.isArray(r.data.number) ? r.data.number[0] : r.data.number) || (i + 1)),
+}));
+
+// Check if this is a returning user (existing progress, needs acknowledgment)
+const returning = Astro.url.searchParams.get('returning') === 'true';
+---
+
+<BaseLayout title="Welcome to Circle of Reading">
+  <div class="min-h-screen flex flex-col">
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col justify-center px-5 py-16">
+      <div class="max-w-2xl mx-auto text-center">
+        <!-- Header -->
+        <header class="mb-16">
+          <p class="text-xs font-sans font-light uppercase tracking-[0.3em] text-[var(--color-gray-500)] mb-6">
+            Leo Tolstoy
+          </p>
+          <h1 class="font-serif text-5xl md:text-6xl mb-3">
+            Круг чтения
+          </h1>
+          <p class="text-xl text-[var(--color-gray-400)] light:text-[var(--color-gray-500)] font-sans font-light tracking-wide">
+            Circle of Reading
+          </p>
+        </header>
+
+        <!-- Narrative -->
+        <article class="prose prose-welcome text-left mb-16">
+          {returning ? (
+            <!-- Welcome Back Variant -->
+            <p class="text-lg font-serif text-[var(--color-gray-300)] light:text-[var(--color-gray-600)] leading-relaxed mb-8">
+              Welcome back. We've redesigned the site to better serve your reading journey.
+              Here's the story behind what you've already been reading...
+            </p>
+          ) : null}
+
+          <!-- Section 1: Discovery -->
+          <p class="text-lg font-serif text-[var(--color-gray-300)] light:text-[var(--color-gray-600)] leading-relaxed mb-8">
+            While researching Tolstoy's <em>A Calendar of Wisdom</em>, I discovered the original
+            Russian title was <em>Krug Chteniya</em>—Circle of Reading. More importantly, I found
+            that English translations omit the weekly readings entirely.
+          </p>
+
+          <!-- Section 2: Solution -->
+          <p class="text-lg font-serif text-[var(--color-gray-300)] light:text-[var(--color-gray-600)] leading-relaxed mb-8">
+            Using AI tools, I extracted and translated these missing readings from Russian academic
+            PDFs. Not for perfect accuracy—professional translators bring irreplaceable context—but
+            to make accessible what was previously locked away.
+          </p>
+
+          <!-- Section 3: Invitation -->
+          <p class="text-lg font-serif text-[var(--color-gray-300)] light:text-[var(--color-gray-600)] leading-relaxed">
+            A curious person with the right tools can now accomplish things that were previously
+            impossible. This is that result. Join me in reading Tolstoy's weekly reflections,
+            one week at a time.
+          </p>
+        </article>
+
+        <!-- CTA -->
+        <WelcomeCTA client:load weeks={weeksData} returning={returning} />
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-5 py-8 text-center">
+      <p class="text-xs font-sans font-light text-[var(--color-gray-600)]">
+        Translated from the Russian Jubilee Edition
+      </p>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .prose-welcome em {
+    font-style: italic;
+  }
+</style>

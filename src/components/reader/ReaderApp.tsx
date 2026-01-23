@@ -10,7 +10,7 @@
  * Uses ReadingProvider for coordinated state management across all components.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ReadingProvider, useReading } from '../../lib/state/ReadingContext';
 import { ProgressRail } from './ProgressRail';
 import { MicroHeader } from './MicroHeader';
@@ -83,39 +83,47 @@ function ReaderAppInner({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Navigation handlers
-  const handleWeekSelect = (week: number) => {
+  // Navigation handlers - wrapped in useCallback to prevent infinite re-renders
+  const handleWeekSelect = useCallback((week: number) => {
     const weekInfo = allWeeks.find(w => w.week === week);
     if (weekInfo) {
       window.location.href = `/week/W${week.toString().padStart(2, '0')}/`;
     }
-  };
+  }, [allWeeks]);
 
-  const handlePrevClick = () => {
+  const handlePrevClick = useCallback(() => {
     if (prevWeek) {
       window.location.href = `/week/W${prevWeek.week.toString().padStart(2, '0')}/`;
     }
-  };
+  }, [prevWeek]);
 
-  const handleNextClick = () => {
+  const handleNextClick = useCallback(() => {
     if (nextWeek) {
       window.location.href = `/week/W${nextWeek.week.toString().padStart(2, '0')}/`;
     }
-  };
+  }, [nextWeek]);
 
-  const handleMonthClick = (monthName?: string) => {
+  const handleMonthClick = useCallback((monthName?: string) => {
     const targetMonth = monthName || month;
     window.location.href = `/${targetMonth.toLowerCase()}/`;
-  };
+  }, [month]);
 
-  const handleIndexClick = () => {
+  const handleIndexClick = useCallback(() => {
     window.location.href = '/';
-  };
+  }, []);
 
-  const handleRecentClick = () => {
+  const handleRecentClick = useCallback(() => {
     // This will be handled by the SmartNext component using state.recents
     setIsDrawerOpen(false);
-  };
+  }, []);
+
+  const handleHeaderClick = useCallback(() => {
+    setIsDrawerOpen(true);
+  }, []);
+
+  const handleDrawerClose = useCallback(() => {
+    setIsDrawerOpen(false);
+  }, []);
 
   return (
     <>
@@ -139,7 +147,7 @@ function ReaderAppInner({
           month={month}
           russianTitle={russianTitle}
           volume={volume}
-          onHeaderClick={() => setIsDrawerOpen(true)}
+          onHeaderClick={handleHeaderClick}
           onPrevClick={handlePrevClick}
           onNextClick={handleNextClick}
           onIndexClick={handleIndexClick}
@@ -151,7 +159,7 @@ function ReaderAppInner({
       {/* Jump Drawer */}
       <JumpDrawer
         isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={handleDrawerClose}
         onWeekSelect={handleWeekSelect}
         weeks={allWeeks}
         currentWeek={currentWeek}
@@ -163,7 +171,7 @@ function ReaderAppInner({
         currentWeek={currentWeek}
         nextWeek={nextWeek}
         onNextClick={handleNextClick}
-        onMonthClick={() => handleMonthClick()}
+        onMonthClick={handleMonthClick}
         onRecentClick={handleRecentClick}
         onIndexClick={handleIndexClick}
         isVisible={isSmartNextVisible}

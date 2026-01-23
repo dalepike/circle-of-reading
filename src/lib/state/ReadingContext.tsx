@@ -3,7 +3,7 @@
  * Provides reading progress state and actions throughout the app
  */
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import type { AppState, ReadingProgress } from '../types/reading';
 import { loadState, saveState } from './storage';
 import {
@@ -52,33 +52,33 @@ export function ReadingProvider({ children }: { children: ReactNode }) {
     }
   }, [state, isClient]);
 
-  // Action: Mark a week as visited
-  const visitWeek = (week: number) => {
+  // Action: Mark a week as visited (wrapped in useCallback for stable reference)
+  const visitWeek = useCallback((week: number) => {
     setState((prevState) => {
       let newState = markVisited(prevState, week);
       newState = addToRecents(newState, week);
       return newState;
     });
-  };
+  }, []);
 
   // Action: Start reading a week (mark as IN_PROGRESS)
-  const startReading = (week: number, scrollPosition: number = 0) => {
+  const startReading = useCallback((week: number, scrollPosition: number = 0) => {
     setState((prevState) => {
       let newState = markInProgress(prevState, week, scrollPosition);
       newState = addToRecents(newState, week);
       return newState;
     });
-  };
+  }, []);
 
   // Action: Complete reading a week
-  const completeReading = (week: number) => {
+  const completeReading = useCallback((week: number) => {
     setState((prevState) => markCompleted(prevState, week));
-  };
+  }, []);
 
   // Action: Update scroll position for current week
-  const updatePosition = (week: number, position: number) => {
+  const updatePosition = useCallback((week: number, position: number) => {
     setState((prevState) => updateScrollPosition(prevState, week, position));
-  };
+  }, []);
 
   // Getter: Get progress for a specific week
   const getProgress = (week: number): ReadingProgress => {
