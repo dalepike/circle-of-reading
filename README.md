@@ -90,3 +90,5 @@ Translations from Volumes 41-42 of the Complete Collected Works (Jubilee Edition
 ## License
 
 Translations and web application content are provided for personal and educational use.
+
+<!-- Migration verified 2026-02-05 -->
